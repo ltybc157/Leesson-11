@@ -130,7 +130,7 @@ window.addEventListener('DOMContentLoaded', function () {
         success: 'Спасибо! Скоро мы с вами свяжемся !', // это строка которая благодарит пользователя который оставил заявку
        failure: 'Что-то пошло не так...' // строка которая говарит что то пошло не так
     };
-    let form = document.querySelector('form'), //вызываем форму обратной связи 
+    let form = document.querySelector('.main-form'), //вызываем форму обратной связи 
         input = form.getElementsByTagName('input'), //вызываем input формы обратной связи
         statusMessage = document.createElement('div'); //создаём новый div на странице
     
