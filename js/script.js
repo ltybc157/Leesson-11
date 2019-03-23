@@ -125,107 +125,59 @@ window.addEventListener('DOMContentLoaded', function () {
 
     // Form
 
-    let message = { // создаём обьект который будет передавать в формате текста// обьект с сообщениями
-        loading: 'Загрузка...', // эта строка будет показыватьть когда наша строка пока не обработалась
-        success: 'Спасибо! Скоро мы с вами свяжемся !', // это строка которая благодарит пользователя который оставил заявку
-       failure: 'Что-то пошло не так...' // строка которая говарит что то пошло не так
-    };
-    let form = document.querySelector('.main-form'), //вызываем форму обратной связи 
-        input = form.getElementsByTagName('input'), //вызываем input формы обратной связи
-        statusMessage = document.createElement('div'); //создаём новый div на странице
+
+    function sendData(data, url) {
+        let message = { // создаём обьект который будет передавать в формате текста// обьект с сообщениями
+            loading: 'Загрузка...', // эта строка будет показыватьть когда наша строка пока не обработалась
+            success: 'Спасибо! Скоро мы с вами свяжемся !', // это строка которая благодарит пользователя который оставил заявку
+           failure: 'Что-то пошло не так...' // строка которая говарит что то пошло не так
+        };
+        let form = document.querySelector(data), //вызываем форму обратной связи 
+            input = form.getElementsByTagName('input'), //вызываем input формы обратной связи
+            statusMessage = document.createElement('div'); //создаём новый div на странице
+        
+        statusMessage.classList.add('status'); // добавляем класс элементу div
     
-    statusMessage.classList.add('status'); // добавляем класс элементу div
-
-    form.addEventListener('submit', function (event) { // мы вешаем обработчик событий на форму которую вызвали (form) не на кнопку а на форму которая отправляет данные который ввел пользоватеть
-        event.preventDefault(); // отменяем стандартное поведение браузера принабирании в форме страница перезагружается
-        form.appendChild(statusMessage); //добавляем новый div в форму обратного вызова
-
-        let request = new XMLHttpRequest(); //создаём запрос чтобы отпраавить данные на сервер
-        // настраиваем запрос
-        request.open('POST', 'server.php'); //1 что вводим каким запросом будем отправлять 2 куда отправлять данные
-       // закомментировал после 18 минуты 11 урок request.setRequestHeader('Content-Type', 'application/x-form-urlencoded'); //запрос к серверу 1 задаём метод обращения 2 аргументом задаём куда обращатся к форме 
-       request.setRequestHeader('Content-type', 'application/json; charset=utf-8'); //запрос к серверу 1 задаём метод обращения 2 аргументом задаём куда обращатся в кадировке  charset=utf-8
-   
-        let formData = new FormData(form); // поместим все что написал пользователь
-        
-        let obj = {}; // в который поместив все данные которые ввел пользователь
-        formData.forEach(function(value, key) {
-            obj[key] = value;
-        });
-        let json = JSON.stringify(obj);  //метод stringify превращает из обычных js фармав превращает в JSON формат
-        
-        
-        
-        request.send(json); // он запускает запрос и обращается к серверу
-
-
-        request.addEventListener('readystatechange', function () { // это прописывается чтобы наблюдать за состоянием наших запросов
-            if (request.readyState < 4) {
-                statusMessage.innerHTML = message.loading;
-            } else if (request.readyState === 4 && request.status == 200) {
-                statusMessage.innerHTML = message.success;
-            } else {
-                statusMessage.innerHTML = message.failure;
-            }
-
-        });
-
-         for (let i = 0; i < input.length; i++) {// перещитываем все input 
-             input[i].value = ''; //для отчистки всех input
-
-         }
-
-    });/* */
-
-    // Form 1
-
-    let message1 = {
-        loading: 'Загрузка...', 
-        success: 'Спасибо! Скоро мы с вами свяжемся !',
-       failure: 'Что-то пошло не так...' 
-    };
-    let form1 = document.getElementById('form'), 
-        input1 = form1.getElementsByTagName('input'), 
-        statusMessage1 = document.createElement('div'); 
+        form.addEventListener('submit', function (event) { // мы вешаем обработчик событий на форму которую вызвали (form) не на кнопку а на форму которая отправляет данные который ввел пользоватеть
+            event.preventDefault(); // отменяем стандартное поведение браузера принабирании в форме страница перезагружается
+            form.appendChild(statusMessage); //добавляем новый div в форму обратного вызова
     
-    statusMessage1.classList.add('status'); 
+            let request = new XMLHttpRequest(); //создаём запрос чтобы отпраавить данные на сервер
+            // настраиваем запрос
+            request.open('POST', url); //1 что вводим каким запросом будем отправлять 2 куда отправлять данные
+           // закомментировал после 18 минуты 11 урок request.setRequestHeader('Content-Type', 'application/x-form-urlencoded'); //запрос к серверу 1 задаём метод обращения 2 аргументом задаём куда обращатся к форме 
+           request.setRequestHeader('Content-type', 'application/json; charset=utf-8'); //запрос к серверу 1 задаём метод обращения 2 аргументом задаём куда обращатся в кадировке  charset=utf-8
+            let formData = new FormData(form); // поместим все что написал пользователь
+            
+            let obj = {}; // в который поместив все данные которые ввел пользователь
+            formData.forEach(function(value, key) {
+                obj[key] = value;
+            });
+            let json = JSON.stringify(obj);  //метод stringify превращает из обычных js фармав превращает в JSON формат
+            request.send(json); // он запускает запрос и обращается к серверу
+            request.addEventListener('readystatechange', function () { // это прописывается чтобы наблюдать за состоянием наших запросов
+                if (request.readyState < 4) {
+                    statusMessage.innerHTML = message.loading;
+                } else if (request.readyState === 4 && request.status == 200) {
+                    statusMessage.innerHTML = message.success;
+                } else {
+                    statusMessage.innerHTML = message.failure;
+                }
+    
+            });
+      
+             for (let i = 0; i < input.length; i++) {// перещитываем все input 
+               
+                input[i].value = ''; //для отчистки всех input
+    
+             }
+    
+        });
 
-    form1.addEventListener('submit', function (event) {
-        event.preventDefault(); 
-        form1.appendChild(statusMessage1); 
 
-        let request1 = new XMLHttpRequest();
-        request1.open('POST', 'server.php');
-        request1.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    }
    
-        let formData1 = new FormData(form1); 
-        
-        let obj1 = {};
-        formData1.forEach(function(value, key) {
-            obj1[key] = value;
-        });
-        let json1 = JSON.stringify(obj1);  
-        
-        
-        
-        request1.send(json1);
-
-
-        request1.addEventListener('readystatechange', function () {
-            if (request1.readyState < 4) {
-                statusMessage1.innerHTML = message1.loading;
-            } else if (request1.readyState === 4 && request1.status == 200) {
-                statusMessage1.innerHTML = message1.success;
-            } else {
-                statusMessage1.innerHTML = message1.failure;
-            }
-
-        });
-
-         for (let i = 0; i < input1.length; i++) { 
-             input1[i].value = ''; 
-
-         }
-
-    });/* */
+    sendData('#form', 'server.php');
+    sendData('.main-form', 'server.php');
+  
 });
