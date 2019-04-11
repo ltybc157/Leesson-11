@@ -163,18 +163,11 @@ window.addEventListener('DOMContentLoaded', function () {
                 } else {
                     statusMessage.innerHTML = message.failure;
                 }
-    
             });
-      
-             for (let i = 0; i < input.length; i++) {// перещитываем все input 
-               
+             for (let i = 0; i < input.length; i++) {// перещитываем все input     
                 input[i].value = ''; //для отчистки всех input
-    
              }
-    
         });
-
-
     }
    
     sendData('#form', 'server.php');
